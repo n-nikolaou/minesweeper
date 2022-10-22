@@ -3,6 +3,8 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
+#include "singular_box.h"
+
 #define SCREEN_WIDTH 1000
 #define SCREEN_HEIGHT 1000
 

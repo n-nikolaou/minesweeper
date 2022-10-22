@@ -69,6 +69,14 @@ build CMakeFiles\minesweeper.dir\main.cpp.obj: CXX_COMPILER__minesweeper_Debug C
   TARGET_COMPILE_PDB = CMakeFiles\minesweeper.dir\
   TARGET_PDB = minesweeper.pdb
 
+build CMakeFiles\minesweeper.dir\singular_box.cpp.obj: CXX_COMPILER__minesweeper_Debug C$:\Users\nickn\Documents\minesweeper\singular_box.cpp || cmake_object_order_depends_target_minesweeper
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd -std:c++14
+  INCLUDES = -IC:\Users\nickn\Documents\SDL2-2.24.0\include
+  OBJECT_DIR = CMakeFiles\minesweeper.dir
+  OBJECT_FILE_DIR = CMakeFiles\minesweeper.dir
+  TARGET_COMPILE_PDB = CMakeFiles\minesweeper.dir\
+  TARGET_PDB = minesweeper.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target minesweeper
@@ -77,7 +85,7 @@ build CMakeFiles\minesweeper.dir\main.cpp.obj: CXX_COMPILER__minesweeper_Debug C
 #############################################
 # Link the executable minesweeper.exe
 
-build minesweeper.exe: CXX_EXECUTABLE_LINKER__minesweeper_Debug CMakeFiles\minesweeper.dir\main.cpp.obj
+build minesweeper.exe: CXX_EXECUTABLE_LINKER__minesweeper_Debug CMakeFiles\minesweeper.dir\main.cpp.obj CMakeFiles\minesweeper.dir\singular_box.cpp.obj
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd
   LINK_FLAGS = /machine:X86 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = SDL2main.lib  SDL2.lib  SDL2_ttf.lib  SDL2_image.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
