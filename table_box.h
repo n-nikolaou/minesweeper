@@ -8,12 +8,13 @@
 #include "singular_box.h"
 
 #define SIDE 20
-#define BOMBS 200
+#define BOMBS 80
 
 class table_box {
 private:
     singular_box ***table;
-    int **numTable;
+    int **numTable, **noBombs;
+    SDL_Renderer *renderer;
 
 public:
     table_box(SDL_Renderer *renderer);
@@ -21,8 +22,10 @@ public:
     void fillTable();
     void fillSquare(int i, int j);
 
-    void renderTable();
+    bool doesBoxNoBomb(int i, int j);
 
+    void renderTable();
+    void hasBeenClicked(bool *hasStarted);
 };
 
 

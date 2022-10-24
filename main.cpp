@@ -5,8 +5,8 @@
 
 #include "table_box.h"
 
-#define SCREEN_WIDTH 1000
-#define SCREEN_HEIGHT 1000
+#define SCREEN_WIDTH SIDE * BOX_SIZE
+#define SCREEN_HEIGHT SIDE * BOX_SIZE
 
 int main(int argc, char* args[]) {
     if(SDL_Init(SDL_INIT_EVERYTHING)) //initialize sdl
@@ -19,7 +19,7 @@ int main(int argc, char* args[]) {
     if(TTF_Init()) std::cout<<TTF_GetError<<std::endl;
 
     //create window
-    SDL_Window *window = SDL_CreateWindow("Basic Snake Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    SDL_Window *window = SDL_CreateWindow("Basic Retro Minesweeper", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0); //create renderer
 
     SDL_SetRenderDrawColor(renderer, 198, 198, 198, 255);
@@ -32,13 +32,12 @@ int main(int argc, char* args[]) {
     for (int i = 0; i < 21; i++)
         SDL_RenderDrawLine(renderer, 0 + i * 50, 0, 0 + i * 50, SCREEN_HEIGHT);
 
-    table_box table(renderer);
-    table.renderTable();
-
     SDL_RenderPresent(renderer);
+    table_box table(renderer);
 
     SDL_Event event;
     bool isRunning = true;
+    bool hasStarted = false;
 
     while (isRunning)
     {
@@ -47,9 +46,10 @@ int main(int argc, char* args[]) {
             {
                 case SDL_QUIT:
                     isRunning = false;
-//
-//                case SDL_MOUSEBUTTONDOWN:
-//                    if (event.button.button == SDL_BUTTON_RIGHT)
+
+                case SDL_MOUSEBUTTONDOWN:
+                    if (event.button.button == SDL_BUTTON_LEFT) table.hasBeenClicked(&hasStarted);
+                //    else if (event.button.button == SDL_BUTTON_RIGHT)
 
             }
     }
