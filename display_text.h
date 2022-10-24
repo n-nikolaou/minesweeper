@@ -5,7 +5,7 @@
 #include <SDL_ttf.h>
 #include <iostream>
 
-SDL_Texture* getTextureText(char *script, char *fontFile, int r, int g, int b, int a, int size, int x, int y, SDL_Renderer *renderer)
+inline SDL_Texture* getTextureText(char *script, char *fontFile, int r, int g, int b, int a, int size, int x, int y, SDL_Renderer *renderer)
 {
     //text color
     SDL_Color textColor;

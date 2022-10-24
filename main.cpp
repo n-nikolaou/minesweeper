@@ -3,7 +3,7 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
-#include "singular_box.h"
+#include "table_box.h"
 
 #define SCREEN_WIDTH 1000
 #define SCREEN_HEIGHT 1000
@@ -32,6 +32,9 @@ int main(int argc, char* args[]) {
     for (int i = 0; i < 21; i++)
         SDL_RenderDrawLine(renderer, 0 + i * 50, 0, 0 + i * 50, SCREEN_HEIGHT);
 
+    table_box table(renderer);
+    table.renderTable();
+
     SDL_RenderPresent(renderer);
 
     SDL_Event event;
@@ -44,6 +47,9 @@ int main(int argc, char* args[]) {
             {
                 case SDL_QUIT:
                     isRunning = false;
+//
+//                case SDL_MOUSEBUTTONDOWN:
+//                    if (event.button.button == SDL_BUTTON_RIGHT)
 
             }
     }

@@ -1,9 +1,9 @@
 #ifndef MINESWEEPER_SINGULAR_BOX_H
 #define MINESWEEPER_SINGULAR_BOX_H
 
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
 
 #include "display_text.h"
 
