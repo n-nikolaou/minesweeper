@@ -1,15 +1,16 @@
 #ifndef MINESWEEPER_TABLE_BOX_H
 #define MINESWEEPER_TABLE_BOX_H
 
+#define SIDE 20
+#define BOMBS 60
+
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
 #include "singular_box.h"
 
-#define SIDE 20
-#define BOMBS 80
-
+class singular_box;
 class table_box {
 private:
     singular_box ***table;
@@ -26,6 +27,8 @@ public:
 
     void renderTable();
     void hasBeenClicked(bool *hasStarted);
+
+    void openOuterSquare(int i, int j);
 };
 
 

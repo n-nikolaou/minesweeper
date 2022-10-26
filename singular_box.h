@@ -1,14 +1,15 @@
 #ifndef MINESWEEPER_SINGULAR_BOX_H
 #define MINESWEEPER_SINGULAR_BOX_H
 
+#define BOX_SIZE 50
+
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-#include "display_text.h"
+#include "funcs.h"
 
-#define BOX_SIZE 50
-
+class table_box;
 class singular_box {
 private:
     bool isOpen;
@@ -22,6 +23,8 @@ public:
 
     void showTexture();
     bool hasBeenClicked();
+    void openBox();
+    bool hasOpened();
 };
 
 

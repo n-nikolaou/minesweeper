@@ -15,7 +15,7 @@ singular_box::singular_box(SDL_Renderer *renderer, int x, int y, int nearBombs)
     dst.w = 8 * BOX_SIZE / 10;
     dst.h = 8 * BOX_SIZE / 10;
 
-    isOpen = true;
+    isOpen = false;
 }
 
 void singular_box::showTexture()
@@ -36,6 +36,16 @@ void singular_box::showTexture()
     }
 
     SDL_RenderCopy(renderer, texture, &src, &dst);
+}
+
+void singular_box::openBox()
+{
+    isOpen = true;
+}
+
+bool singular_box::hasOpened()
+{
+    return isOpen;
 }
 
 bool singular_box::hasBeenClicked()

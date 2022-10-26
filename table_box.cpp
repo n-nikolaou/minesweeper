@@ -87,13 +87,13 @@ void table_box::hasBeenClicked(bool *hasStarted)
 {
     int mouseX, mouseY;
     SDL_GetMouseState(&mouseX, &mouseY);
+    int i, j;
+    i = mouseY / BOX_SIZE;
+    j = mouseX / BOX_SIZE;
 
     if (!(*hasStarted))
     {
         *hasStarted = true;
-        int i, j;
-        i = mouseY / BOX_SIZE;
-        j = mouseX / BOX_SIZE;
 
         if (i > 0 && j > 0)
         {
@@ -142,5 +142,42 @@ void table_box::hasBeenClicked(bool *hasStarted)
 
         renderTable();
         SDL_RenderPresent(renderer);
+    }
+    else
+    {
+        openOuterSquare(i, j);
+
+        for (int i = 0; i < SIDE; i++)
+            for (int j = 0; j < SIDE; j++)
+                table[i][j]->showTexture();
+    }
+}
+
+void table_box::openOuterSquare(int i, int j)
+{
+    if (numTable[i][j] == 0)
+    {
+        table[i][j]->openBox();
+
+        if (i > 0 && j > 0) if (numTable[i - 1][j - 1] == 0 && !table[i - 1][j - 1]->hasOpened()) openOuterSquare(i - 1, j - 1);
+        if (i > 0 && j < SIDE - 1) if (numTable[i - 1][j + 1] == 0 && !table[i - 1][j + 1]->hasOpened()) openOuterSquare(i - 1, j + 1);
+        if (i < SIDE - 1 && j > 0) if (numTable[i + 1][j - 1] == 0 && !table[i + 1][j - 1]->hasOpened()) openOuterSquare(i + 1, j - 1);
+        if (i < SIDE - 1 && j < SIDE - 1) if (numTable[i + 1][j + 1] == 0 && !table[i + 1][j + 1]->hasOpened()) openOuterSquare(i + 1, j + 1);
+
+        if (i > 0) if (numTable[i - 1][j] == 0 && !table[i - 1][j]->hasOpened()) openOuterSquare(i - 1, j);
+        if (j > 0) if (numTable[i][j - 1] == 0 && !table[i][j - 1]->hasOpened()) openOuterSquare(i, j - 1);
+        if (j < SIDE - 1) if (numTable[i][j + 1] == 0 && !table[i][j + 1]->hasOpened()) openOuterSquare(i, j + 1);
+        if (i < SIDE - 1) if (numTable[i + 1][j] == 0 && !table[i + 1][j]->hasOpened()) openOuterSquare(i + 1, j);
+
+        if (i > 0 && j > 0) table[i - 1][j - 1]->openBox();
+        if (i > 0 && j < SIDE - 1) table[i - 1][j + 1]->openBox();
+        if (i < SIDE - 1 && j > 0) table[i + 1][j - 1]->openBox();
+        if (i < SIDE - 1 && j < SIDE - 1) table[i + 1][j + 1]->openBox();
+
+        if (i > 0) table[i - 1][j]->openBox();
+        if (j > 0) table[i][j - 1]->openBox();
+        if (j < SIDE - 1) table[i][j + 1]->openBox();
+        if (i < SIDE - 1) table[i + 1][j]->openBox();
+
     }
 }

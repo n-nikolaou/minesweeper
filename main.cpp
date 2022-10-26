@@ -3,10 +3,7 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
-#include "table_box.h"
-
-#define SCREEN_WIDTH SIDE * BOX_SIZE
-#define SCREEN_HEIGHT SIDE * BOX_SIZE
+#include "funcs.h"
 
 int main(int argc, char* args[]) {
     if(SDL_Init(SDL_INIT_EVERYTHING)) //initialize sdl
@@ -22,16 +19,7 @@ int main(int argc, char* args[]) {
     SDL_Window *window = SDL_CreateWindow("Basic Retro Minesweeper", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0); //create renderer
 
-    SDL_SetRenderDrawColor(renderer, 198, 198, 198, 255);
-    SDL_RenderClear(renderer);
-
-    SDL_SetRenderDrawColor(renderer, 47, 79, 79, 255);
-    for (int i = 0; i < 21; i++)
-        SDL_RenderDrawLine(renderer, 0, 0 + i * 50, SCREEN_WIDTH, 0 + i * 50);
-
-    for (int i = 0; i < 21; i++)
-        SDL_RenderDrawLine(renderer, 0 + i * 50, 0, 0 + i * 50, SCREEN_HEIGHT);
-
+    showBG(renderer);
     SDL_RenderPresent(renderer);
     table_box table(renderer);
 
@@ -48,7 +36,11 @@ int main(int argc, char* args[]) {
                     isRunning = false;
 
                 case SDL_MOUSEBUTTONDOWN:
-                    if (event.button.button == SDL_BUTTON_LEFT) table.hasBeenClicked(&hasStarted);
+                    if (event.button.button == SDL_BUTTON_LEFT) {
+                        showBG(renderer);
+                        table.hasBeenClicked(&hasStarted);
+                        SDL_RenderPresent(renderer);
+                    }
                 //    else if (event.button.button == SDL_BUTTON_RIGHT)
 
             }
