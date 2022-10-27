@@ -22,11 +22,13 @@ public:
 
     void fillTable();
     void fillSquare(int i, int j);
+    void showBG();
 
     bool doesBoxNoBomb(int i, int j);
 
     void renderTable();
     void hasBeenClicked(bool *hasStarted);
+    void hasBeenRightClicked();
 
     void openOuterSquare(int i, int j);
 };

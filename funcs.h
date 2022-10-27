@@ -10,20 +10,7 @@
 #define SCREEN_WIDTH SIDE * BOX_SIZE
 #define SCREEN_HEIGHT SIDE * BOX_SIZE
 
-inline void showBG(SDL_Renderer *renderer)
-{
-    SDL_SetRenderDrawColor(renderer, 198, 198, 198, 255);
-    SDL_RenderClear(renderer);
-
-    SDL_SetRenderDrawColor(renderer, 47, 79, 79, 255);
-    for (int i = 0; i < 21; i++)
-        SDL_RenderDrawLine(renderer, 0, 0 + i * 50, SCREEN_WIDTH, 0 + i * 50);
-
-    for (int i = 0; i < 21; i++)
-        SDL_RenderDrawLine(renderer, 0 + i * 50, 0, 0 + i * 50, SCREEN_HEIGHT);
-}
-
-inline SDL_Texture* getTextureText(char *script, char *fontFile, int r, int g, int b, int a, int size, int x, int y, SDL_Renderer *renderer)
+inline SDL_Texture* getTextureText(char *script, char *fontFile, int r, int g, int b, int a, int size, SDL_Renderer *renderer)
 {
     //text color
     SDL_Color textColor;
@@ -43,10 +30,6 @@ inline SDL_Texture* getTextureText(char *script, char *fontFile, int r, int g, i
     srcText.y = 0;
     srcText.w = wText;
     srcText.h = hText;
-
-    SDL_Rect dstText = srcText;
-    dstText.x = x - wText/2;
-    dstText.y = y - hText/2;
 
     SDL_Surface *text = TTF_RenderText_Solid(font, script, textColor); //creates the text
     SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, text); //transform to texture from surface

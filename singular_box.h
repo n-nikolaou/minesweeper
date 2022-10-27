@@ -12,8 +12,8 @@
 class table_box;
 class singular_box {
 private:
-    bool isOpen;
-    int nearBombs;
+    bool isOpen, isFlagged;
+    int nearBombs, x, y;
     SDL_Renderer *renderer;
     SDL_Rect src, dst;
     SDL_Texture *texture;
@@ -22,8 +22,10 @@ public:
     singular_box(SDL_Renderer *renderer, int x, int y, int nearBombs);
 
     void showTexture();
-    bool hasBeenClicked();
+
     void openBox();
+    void flagBox();
+
     bool hasOpened();
 };
 

@@ -52,7 +52,7 @@ table_box::table_box(SDL_Renderer *renderer)
     {
         table[i] = (singular_box**) malloc(SIDE * sizeof(singular_box*));
         for (int j = 0; j < SIDE; j++)
-            table[i][j] = (singular_box*) malloc(sizeof(singular_box));
+            table[i][j] = new singular_box(renderer, j * BOX_SIZE, i * BOX_SIZE, -2);
     }
 
     numTable = (int**) malloc(SIDE * sizeof(int*));
@@ -66,6 +66,9 @@ table_box::table_box(SDL_Renderer *renderer)
         noBombs[i][0] = -1;
         noBombs[i][1] = -1;
     }
+
+    showBG();
+    renderTable();
 }
 
 void table_box::renderTable()
@@ -93,6 +96,7 @@ void table_box::hasBeenClicked(bool *hasStarted)
 
     if (!(*hasStarted))
     {
+        showBG();
         *hasStarted = true;
 
         if (i > 0 && j > 0)
@@ -139,26 +143,20 @@ void table_box::hasBeenClicked(bool *hasStarted)
         }
 
         fillTable();
-
-        renderTable();
-        SDL_RenderPresent(renderer);
     }
-    else
-    {
-        openOuterSquare(i, j);
 
-        for (int i = 0; i < SIDE; i++)
-            for (int j = 0; j < SIDE; j++)
-                table[i][j]->showTexture();
-    }
+    showBG();
+    openOuterSquare(i, j);
+    renderTable();
 }
 
 void table_box::openOuterSquare(int i, int j)
 {
+    table[i][j]->openBox();
+
     if (numTable[i][j] == 0)
     {
-        table[i][j]->openBox();
-
+        //open the neighbor boxes with zero bombs if the haven't been already opened
         if (i > 0 && j > 0) if (numTable[i - 1][j - 1] == 0 && !table[i - 1][j - 1]->hasOpened()) openOuterSquare(i - 1, j - 1);
         if (i > 0 && j < SIDE - 1) if (numTable[i - 1][j + 1] == 0 && !table[i - 1][j + 1]->hasOpened()) openOuterSquare(i - 1, j + 1);
         if (i < SIDE - 1 && j > 0) if (numTable[i + 1][j - 1] == 0 && !table[i + 1][j - 1]->hasOpened()) openOuterSquare(i + 1, j - 1);
@@ -169,6 +167,7 @@ void table_box::openOuterSquare(int i, int j)
         if (j < SIDE - 1) if (numTable[i][j + 1] == 0 && !table[i][j + 1]->hasOpened()) openOuterSquare(i, j + 1);
         if (i < SIDE - 1) if (numTable[i + 1][j] == 0 && !table[i + 1][j]->hasOpened()) openOuterSquare(i + 1, j);
 
+        //open all the neighbor boxes of the zero-bomb-boxes
         if (i > 0 && j > 0) table[i - 1][j - 1]->openBox();
         if (i > 0 && j < SIDE - 1) table[i - 1][j + 1]->openBox();
         if (i < SIDE - 1 && j > 0) table[i + 1][j - 1]->openBox();
@@ -180,4 +179,33 @@ void table_box::openOuterSquare(int i, int j)
         if (i < SIDE - 1) table[i + 1][j]->openBox();
 
     }
+}
+
+void table_box::hasBeenRightClicked()
+{
+    int mouseX, mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY);
+    int i, j;
+    i = mouseY / BOX_SIZE;
+    j = mouseX / BOX_SIZE;
+
+    if (!table[i][j]->hasOpened())
+    {
+        showBG();
+        table[i][j]->flagBox();
+        renderTable();
+    }
+}
+
+void table_box::showBG()
+{
+    SDL_SetRenderDrawColor(renderer, 198, 198, 198, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_SetRenderDrawColor(renderer, 47, 79, 79, 255);
+    for (int i = 0; i < 21; i++)
+        SDL_RenderDrawLine(renderer, 0, 0 + i * BOX_SIZE, SCREEN_WIDTH, 0 + i * BOX_SIZE);
+
+    for (int i = 0; i < 21; i++)
+        SDL_RenderDrawLine(renderer, 0 + i * BOX_SIZE, 0, 0 + i * BOX_SIZE, SCREEN_HEIGHT);
 }

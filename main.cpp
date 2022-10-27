@@ -19,9 +19,8 @@ int main(int argc, char* args[]) {
     SDL_Window *window = SDL_CreateWindow("Basic Retro Minesweeper", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0); //create renderer
 
-    showBG(renderer);
-    SDL_RenderPresent(renderer);
     table_box table(renderer);
+    SDL_RenderPresent(renderer);
 
     SDL_Event event;
     bool isRunning = true;
@@ -37,11 +36,14 @@ int main(int argc, char* args[]) {
 
                 case SDL_MOUSEBUTTONDOWN:
                     if (event.button.button == SDL_BUTTON_LEFT) {
-                        showBG(renderer);
                         table.hasBeenClicked(&hasStarted);
                         SDL_RenderPresent(renderer);
                     }
-                //    else if (event.button.button == SDL_BUTTON_RIGHT)
+                    else if (event.button.button == SDL_BUTTON_RIGHT && hasStarted)
+                    {
+                        table.hasBeenRightClicked();
+                        SDL_RenderPresent(renderer);
+                    }
 
             }
     }
