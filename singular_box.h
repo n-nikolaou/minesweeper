@@ -27,6 +27,7 @@ public:
     void flagBox();
 
     bool hasOpened();
+    bool hasFlagged();
 };
 
 

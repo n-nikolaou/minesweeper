@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 #include <ctime>
-#include "iostream"
+
 void table_box::fillSquare(int i, int j)
 {
     if (i > 0) numTable[i - 1][j] = (numTable[i - 1][j] == -1) ? -1 : numTable[i - 1][j] + 1;
@@ -43,9 +43,10 @@ void table_box::fillTable()
             table[i][j] = new singular_box(renderer, j * BOX_SIZE, i * BOX_SIZE, numTable[i][j]);
 }
 
-table_box::table_box(SDL_Renderer *renderer)
+table_box::table_box(SDL_Renderer *renderer, toolbox *menu)
 {
     this->renderer = renderer;
+    this->menu = menu;
 
     table = (singular_box***) malloc(SIDE * SIDE * sizeof(singular_box**));
     for (int i = 0; i < SIDE; i++)
@@ -67,7 +68,7 @@ table_box::table_box(SDL_Renderer *renderer)
         noBombs[i][1] = -1;
     }
 
-    showBG();
+    showBG(renderer);
     renderTable();
 }
 
@@ -91,12 +92,11 @@ void table_box::hasBeenClicked(bool *hasStarted)
     int mouseX, mouseY;
     SDL_GetMouseState(&mouseX, &mouseY);
     int i, j;
-    i = mouseY / BOX_SIZE;
+    i = (mouseY - 75) / BOX_SIZE;
     j = mouseX / BOX_SIZE;
 
     if (!(*hasStarted))
     {
-        showBG();
         *hasStarted = true;
 
         if (i > 0 && j > 0)
@@ -145,7 +145,7 @@ void table_box::hasBeenClicked(bool *hasStarted)
         fillTable();
     }
 
-    showBG();
+    showBG(renderer);
     openOuterSquare(i, j);
     renderTable();
 }
@@ -186,26 +186,15 @@ void table_box::hasBeenRightClicked()
     int mouseX, mouseY;
     SDL_GetMouseState(&mouseX, &mouseY);
     int i, j;
-    i = mouseY / BOX_SIZE;
+    i = (mouseY - 75) / BOX_SIZE;
     j = mouseX / BOX_SIZE;
 
     if (!table[i][j]->hasOpened())
     {
-        showBG();
+        showBG(renderer);
         table[i][j]->flagBox();
         renderTable();
+        if (table[i][j]->hasFlagged()) menu->reduceRemaining();
+        else menu->increaseRemaining();
     }
-}
-
-void table_box::showBG()
-{
-    SDL_SetRenderDrawColor(renderer, 198, 198, 198, 255);
-    SDL_RenderClear(renderer);
-
-    SDL_SetRenderDrawColor(renderer, 47, 79, 79, 255);
-    for (int i = 0; i < 21; i++)
-        SDL_RenderDrawLine(renderer, 0, 0 + i * BOX_SIZE, SCREEN_WIDTH, 0 + i * BOX_SIZE);
-
-    for (int i = 0; i < 21; i++)
-        SDL_RenderDrawLine(renderer, 0 + i * BOX_SIZE, 0, 0 + i * BOX_SIZE, SCREEN_HEIGHT);
 }

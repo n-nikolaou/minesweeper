@@ -2,8 +2,32 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
+#include <thread>
 
 #include "funcs.h"
+#include "toolbox.h"
+
+int secs = 0;
+char *dots = (char*) malloc(2 * sizeof(char));
+bool ready = false;
+
+void startTool(toolbox *tBox, bool *hasStarted, SDL_Renderer *renderer)
+{
+    while (true)
+    {
+        if (*hasStarted) secs++;
+
+        strcpy(dots, ":");
+        tBox->showTexture(secs, dots);
+        if (ready) SDL_RenderPresent(renderer);
+        SDL_Delay(500);
+
+        strcpy(dots, " ");
+        tBox->showTexture(secs, dots);
+        if (ready) SDL_RenderPresent(renderer);
+        SDL_Delay(500);
+    }
+}
 
 int main(int argc, char* args[]) {
     if(SDL_Init(SDL_INIT_EVERYTHING)) //initialize sdl
@@ -19,12 +43,15 @@ int main(int argc, char* args[]) {
     SDL_Window *window = SDL_CreateWindow("Basic Retro Minesweeper", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0); //create renderer
 
-    table_box table(renderer);
-    SDL_RenderPresent(renderer);
-
     SDL_Event event;
     bool isRunning = true;
     bool hasStarted = false;
+    bool gameOver = false;
+
+    toolbox *tBox = new toolbox(renderer);
+    std::thread toolBox(startTool, tBox, &hasStarted, renderer);
+    table_box table(renderer, tBox);
+    ready = true;
 
     while (isRunning)
     {
@@ -36,22 +63,19 @@ int main(int argc, char* args[]) {
 
                 case SDL_MOUSEBUTTONDOWN:
                     if (event.button.button == SDL_BUTTON_LEFT) {
+                        ready = false;
                         table.hasBeenClicked(&hasStarted);
-                        SDL_RenderPresent(renderer);
+                        ready = true;
                     }
                     else if (event.button.button == SDL_BUTTON_RIGHT && hasStarted)
                     {
+                        ready = false;
                         table.hasBeenRightClicked();
-                        SDL_RenderPresent(renderer);
+                        ready = true;
                     }
 
             }
     }
-
-    int i;
-    std::cin>>i;
-
-
 
     return 0;
 }

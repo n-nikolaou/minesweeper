@@ -11,10 +11,10 @@ singular_box::singular_box(SDL_Renderer *renderer, int x, int y, int nearBombs)
     src.h = 70;
 
     this->x = x;
-    this->y = y;
+    this->y = y + 75;
 
     dst.x = x;
-    dst.y = y;
+    dst.y = y + 75;
     dst.w = BOX_SIZE;
     dst.h = BOX_SIZE;
 
@@ -48,17 +48,10 @@ void singular_box::showTexture()
     SDL_RenderCopy(renderer, texture, &src, &dst);
 }
 
-void singular_box::openBox()
-{
-    isOpen = true;
-}
+void singular_box::openBox() {isOpen = true;}
 
-void singular_box::flagBox()
-{
-    isFlagged = !isFlagged;
-}
+void singular_box::flagBox() {isFlagged = !isFlagged;}
 
-bool singular_box::hasOpened()
-{
-    return isOpen;
-}
+bool singular_box::hasOpened() {return isOpen;}
+
+bool singular_box::hasFlagged() {return isFlagged;}
