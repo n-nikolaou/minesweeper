@@ -1,9 +1,10 @@
 #include "toolbox.h"
 
-toolbox::toolbox(SDL_Renderer *renderer)
+toolbox::toolbox(SDL_Renderer *renderer, popup *settings)
 {
-    remainingBombs = BOMBS;
+    remainingBombs = DEFAULT_BOMBS;
     this->renderer = renderer;
+    this->settings = settings;
     gameOver = false;
 
     leftBox.x = 100;
@@ -21,10 +22,20 @@ toolbox::toolbox(SDL_Renderer *renderer)
     rightBox.w = 200;
     rightBox.h = 45;
 
-    rBoxT.x = SCREEN_WIDTH - 285;
+    rBoxT.x = SCREEN_WIDTH - 275;
     rBoxT.y = 20;
-    rBoxT.w = 175;
+    rBoxT.w = 155;
     rBoxT.h = 35;
+
+    settingsBox.x = SCREEN_WIDTH / 2 - 45/2;
+    settingsBox.y = 15;
+    settingsBox.w = 45;
+    settingsBox.h = 45;
+
+    srcSettings.x = 0;
+    srcSettings.y = 0;
+    srcSettings.w = 70;
+    srcSettings.h = 70;
 }
 
 void toolbox::showTexture(int time, char* dots)
@@ -53,8 +64,23 @@ void toolbox::showTexture(int time, char* dots)
     else
         sprintf(num, "%d%s%d\0", time / 60, dots, time % 60);
 
+    SDL_Texture *settings = IMG_LoadTexture(renderer, "C:/Users/nickn/Documents/minesweeper/files/settings.png");
+    SDL_RenderCopy(renderer, settings, &srcSettings, &settingsBox);
+
     SDL_Texture *textTime = getTextureText(num, "C:/Users/nickn/Documents/minesweeper/files/digital.ttf", 0, 220, 10, 255, 80, renderer);
     SDL_RenderCopy(renderer, textTime, &src, &rBoxT);
+}
+
+void toolbox::hasBeenClicked(bool *hasStarted, bool *isMenuOpen)
+{
+    int mouseX, mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY);
+
+    if (mouseY > settingsBox.y && mouseY < settingsBox.h + settingsBox.h && mouseX > settingsBox.x && mouseX < settingsBox.x + settingsBox.w)
+    {
+        *isMenuOpen = true;
+        settings->openWindow();
+    }
 }
 
 void toolbox::reduceRemaining() {remainingBombs--;}

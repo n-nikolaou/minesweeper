@@ -4,6 +4,7 @@
 #include "SDL_ttf.h"
 #include <thread>
 
+#include "popup.h"
 #include "funcs.h"
 #include "toolbox.h"
 
@@ -20,12 +21,44 @@ void startTool(toolbox *tBox, bool *hasStarted, SDL_Renderer *renderer)
         strcpy(dots, ":");
         tBox->showTexture(secs, dots);
         if (ready) SDL_RenderPresent(renderer);
-        SDL_Delay(500);
+        SDL_Delay(100);
+        strcpy(dots, ":");
+        tBox->showTexture(secs, dots);
+        if (ready) SDL_RenderPresent(renderer);
+        SDL_Delay(100);
+        strcpy(dots, ":");
+        tBox->showTexture(secs, dots);
+        if (ready) SDL_RenderPresent(renderer);
+        SDL_Delay(100);
+        strcpy(dots, ":");
+        tBox->showTexture(secs, dots);
+        if (ready) SDL_RenderPresent(renderer);
+        SDL_Delay(100);
+        strcpy(dots, ":");
+        tBox->showTexture(secs, dots);
+        if (ready) SDL_RenderPresent(renderer);
+        SDL_Delay(100);
 
         strcpy(dots, " ");
         tBox->showTexture(secs, dots);
         if (ready) SDL_RenderPresent(renderer);
-        SDL_Delay(500);
+        SDL_Delay(100);
+        strcpy(dots, " ");
+        tBox->showTexture(secs, dots);
+        if (ready) SDL_RenderPresent(renderer);
+        SDL_Delay(100);
+        strcpy(dots, " ");
+        tBox->showTexture(secs, dots);
+        if (ready) SDL_RenderPresent(renderer);
+        SDL_Delay(100);
+        strcpy(dots, " ");
+        tBox->showTexture(secs, dots);
+        if (ready) SDL_RenderPresent(renderer);
+        SDL_Delay(100);
+        strcpy(dots, " ");
+        tBox->showTexture(secs, dots);
+        if (ready) SDL_RenderPresent(renderer);
+        SDL_Delay(100);
     }
 }
 
@@ -45,10 +78,12 @@ int main(int argc, char* args[]) {
 
     SDL_Event event;
     bool isRunning = true;
+    bool isMenuOpen = false;
     bool hasStarted = false;
     bool gameOver = false;
 
-    toolbox *tBox = new toolbox(renderer);
+    popup *settings = new popup(renderer);
+    toolbox *tBox = new toolbox(renderer, settings);
     std::thread toolBox(startTool, tBox, &hasStarted, renderer);
     table_box table(renderer, tBox);
     ready = true;
@@ -62,12 +97,16 @@ int main(int argc, char* args[]) {
                     isRunning = false;
 
                 case SDL_MOUSEBUTTONDOWN:
-                    if (event.button.button == SDL_BUTTON_LEFT) {
+                    if (event.button.button == SDL_BUTTON_LEFT && !isMenuOpen) {
                         ready = false;
                         table.hasBeenClicked(&hasStarted);
+                        tBox->hasBeenClicked(&hasStarted, &isMenuOpen);
                         ready = true;
                     }
-                    else if (event.button.button == SDL_BUTTON_RIGHT && hasStarted)
+                    else if (event.button.button == SDL_BUTTON_LEFT && isMenuOpen) {
+                        settings->hasBeenClicked();
+                    }
+                    else if (event.button.button == SDL_BUTTON_RIGHT && hasStarted && !isMenuOpen)
                     {
                         ready = false;
                         table.hasBeenRightClicked();

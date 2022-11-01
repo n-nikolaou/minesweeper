@@ -5,10 +5,13 @@
 #include <SDL_ttf.h>
 #include <iostream>
 
+#include "slidebar.h"
+#include "popup.h"
 #include "table_box.h"
 
-#define SCREEN_WIDTH SIDE * BOX_SIZE
-#define SCREEN_HEIGHT SIDE * BOX_SIZE + 75
+#define SCREEN_WIDTH 768
+#define SCREEN_HEIGHT 768 + 75
+#define BOX_SIZE SCREEN_WIDTH / DEFAULT_SIDE
 
 inline void showBG(SDL_Renderer *renderer)
 {
@@ -16,10 +19,10 @@ inline void showBG(SDL_Renderer *renderer)
     SDL_RenderClear(renderer);
 
     SDL_SetRenderDrawColor(renderer, 47, 79, 79, 255);
-    for (int i = 0; i < 21; i++)
+    for (int i = 0; i < DEFAULT_SIDE; i++)
         SDL_RenderDrawLine(renderer, 0, 75 + i * BOX_SIZE, SCREEN_WIDTH, 75 + i * BOX_SIZE);
 
-    for (int i = 0; i < 21; i++)
+    for (int i = 0; i < DEFAULT_SIDE; i++)
         SDL_RenderDrawLine(renderer, 0 + i * BOX_SIZE, 75, 0 + i * BOX_SIZE, SCREEN_HEIGHT);
 }
 
@@ -34,15 +37,6 @@ inline SDL_Texture* getTextureText(char *script, char *fontFile, int r, int g, i
 
     //opening font file
     TTF_Font *font = TTF_OpenFont(fontFile, size);
-
-    //get the width and the height of the text given the pt size of the text
-    int wText, hText;
-    TTF_SizeText(font, script, &wText, &hText);
-    SDL_Rect srcText;
-    srcText.x = 0;
-    srcText.y = 0;
-    srcText.w = wText;
-    srcText.h = hText;
 
     SDL_Surface *text = TTF_RenderText_Solid(font, script, textColor); //creates the text
     SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, text); //transform to texture from surface

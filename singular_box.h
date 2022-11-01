@@ -1,8 +1,6 @@
 #ifndef MINESWEEPER_SINGULAR_BOX_H
 #define MINESWEEPER_SINGULAR_BOX_H
 
-#define BOX_SIZE 50
-
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>

@@ -1,8 +1,8 @@
 #ifndef MINESWEEPER_TABLE_BOX_H
 #define MINESWEEPER_TABLE_BOX_H
 
-#define SIDE 18
-#define BOMBS 20
+#define DEFAULT_SIDE 12
+#define DEFAULT_BOMBS DEFAULT_SIDE * DEFAULT_SIDE * 20 / 100
 
 #include <SDL.h>
 #include <SDL_image.h>
